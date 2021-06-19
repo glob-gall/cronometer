@@ -120,3 +120,11 @@ body{
   left: 2em;
   opacity: 20%;
 }
+.wojaks{
+  z-index: -1;
+  position: absolute;
+  bottom: 0;
+  right: 2em;
+  opacity: 20%;
+  height: 24em;
+}
