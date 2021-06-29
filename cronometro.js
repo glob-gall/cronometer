@@ -4,15 +4,31 @@ const stop = document.querySelector('.button-stop')
 const time = document.querySelector('.time')
 const maxtime = document.querySelector('.max-time')
 
-let MAX_TIME=000000;
+let MAX_TIME=0
 let timerOn = false
-let cronometerLoop
+let timer=0
+
+const loop =()=>{
+  timerOn=true
+  timer += 100
+  console.log(timer);
+
+  if(timer>=MAX_TIME && MAX_TIME!==0){
+    stopTimer()
+    alarm()
+  }
+ time.innerHTML= convertToTimer(timer.toString())
+}
+let cronometer 
+const startConometer = (start)=> start
+  ? cronometer = setInterval(loop,100) 
+  : clearInterval(cronometer)
 
 
-const convertToTimer = (time)=>{
-    const min = Math.trunc(time.slice(0,time.length-3)/60)
-     const sec = time.slice(0,time.length-3)%60
-     const mili = time.slice(time.length-3,time.length-1)
+const convertToTimer = (stringTime='000000')=>{
+    const min = Math.trunc(stringTime.slice(0,stringTime.length-3)/60)
+     const sec = stringTime.slice(0,stringTime.length-3)%60
+     const mili = stringTime.slice(stringTime.length-3,stringTime.length-1)
 
      return `${min<10?'0':''}${min}:${sec<10?'0':''}${sec}:${mili}`
 }
@@ -22,39 +38,29 @@ const alarm = ()=>{
 }
 
 const startTimer = ()=>{
-  stop.innerHTML = 'STOP'
-  start.classList.add('disabled')
-  stop.classList.remove('disabled')
-
-  let timer = new Date()
   if(timerOn){
     return
   }
-   cronometerLoop = setInterval(()=>{
-    const newDate = new Date()
-    let cTime = `${newDate-timer}`
-    if(cTime>=MAX_TIME && MAX_TIME!==0){
-      stopTimer()
-      alarm()
-    }
-     time.innerHTML= convertToTimer(cTime)
-     
-  },100)
+  stop.innerHTML = 'STOP'
+  start.classList.add('disabled')
+  stop.classList.remove('disabled')
+  startConometer(true)
+
   timerOn=true
 }
 const stopTimer = ()=>{
-  
-  if (timerOn===false){
-    stop.innerHTML = 'STOP'
-    stop.classList.add('disabled')
-    start.classList.remove('disabled')
-    time.innerHTML='00:00'
-    timerOn=true
-  }
-    timerOn=false
+  startConometer(false)
+  if(timerOn ===true){
     stop.innerHTML = 'RESET'
-    clearInterval(cronometerLoop)
+    timerOn= false
     return
+  }
+  stop.innerHTML = 'STOP'
+  stop.classList.add('disabled')
+  start.classList.remove('disabled')
+  time.innerHTML='00:00:00'
+  timerOn= false
+  timer = 0
 }
 
 start.addEventListener('click',()=>startTimer())
@@ -66,12 +72,9 @@ const setMaxTime = (time)=>{
     return
   }
   if(MAX_TIME+time===0){
-    MAX_TIME += time
     maxtime .innerHTML= "MAX TIME: 00:00:00"
     return
   }
-
-
   MAX_TIME += time
   maxtime .innerHTML= `MAX TIME: ${convertToTimer(MAX_TIME.toString())}`
   
