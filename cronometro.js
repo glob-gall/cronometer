@@ -41,6 +41,9 @@ const startTimer = ()=>{
   if(timerOn){
     return
   }
+  if(timer>=MAX_TIME){
+    timer = 0
+  }
   stop.innerHTML = 'STOP'
   start.classList.add('disabled')
   stop.classList.remove('disabled')
@@ -51,6 +54,7 @@ const startTimer = ()=>{
 const stopTimer = ()=>{
   startConometer(false)
   if(timerOn ===true){
+    start.classList.remove('disabled')
     stop.innerHTML = 'RESET'
     timerOn= false
     return
